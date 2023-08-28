@@ -192,9 +192,8 @@ def find_empty_cell(board, original_board=None):
     for i in range(9):
         for j in range(9):
             if board[i][j] == 0 and original_board[i][j] == 0:
-                return (i, j)  # linha, coluna
+                return (i, j)
     return None
-
 
 def generate_sudoku():
     board = [[0 for _ in range(9)] for _ in range(9)]
@@ -236,15 +235,13 @@ def greedy_search(board):
     for num in possibilities:
         if is_valid(board, num, row, col):
             board[row][col] = num
-            pygame.time.wait(25)  # Adds a delay for visualization
+            pygame.time.wait(10)  # Adds a delay for visualization
             draw_numbers()  # Redraws the numbers on the board
             draw_grid()  # Redraws the grid
             check_for_quit()  # Verify if the user clicked on the close button
             pygame.display.flip()  # Updates the display
-
             if greedy_search(board):
                 return True
-
             board[row][col] = 0
     return False
 
@@ -292,7 +289,7 @@ def a_star(board):
         for i in range(9):
             for j in range(9):
                 board[i][j] = current_board[i][j]
-        pygame.time.wait(25)  # Adds a delay for visualization
+        pygame.time.wait(10)  # Adds a delay for visualization
         draw_numbers()  # Redraws the numbers on the board
         draw_grid()  # Redraws the grid
         check_for_quit()  # Verify if the user clicked on the close button
@@ -374,6 +371,5 @@ def game_loop():
         draw_highlights()
         draw_buttons()
         pygame.display.flip()
-
 
 game_loop()
