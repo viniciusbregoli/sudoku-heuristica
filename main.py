@@ -286,6 +286,50 @@ for i in range(9):
             initial_positions.add((i, j))
 
 
+def a_star(board):
+    priority_queue = [(g(board) + h(board), [row[:] for row in board])]
+    while priority_queue:
+        _, current_board = heapq.heappop(priority_queue)
+        for i in range(9):
+            for j in range(9):
+                board[i][j] = current_board[i][j]
+        pygame.time.wait(2)  # Adiciona um atraso para visualização
+        draw_numbers()  # Redesenha os números no tabuleiro
+        draw_grid()  # Redesenha a grade
+        check_for_quit()  # Verifica se o usuário clicou no botão de fechar
+        pygame.display.flip()  # Atualiza o display
+        if h(current_board) == 0: 
+            return
+        row, col = find_empty_cell(current_board)
+        for num in range(1, 10):
+            if is_valid_move(current_board, row, col, num):
+                new_board = [row[:] for row in current_board]
+                new_board[row][col] = num
+                heapq.heappush(priority_queue, (g(new_board) + h(new_board), new_board))
+
+
+def is_valid_move(board, row, col, num):
+    for x in range(9):
+        if board[row][x] == num:
+            return False
+    for x in range(9):
+        if board[x][col] == num:
+            return False
+    startRow, startCol = 3 * (row // 3), 3 * (col // 3)
+    for i in range(3):
+        for j in range(3):
+            if board[i + startRow][j + startCol] == num:
+                return False
+    return True
+
+# Função para calcular g(n) - número de células preenchidas
+def g(board):
+    return sum(cell != 0 for row in board for cell in row)
+
+# Função para calcular h(n) - número de células vazias
+def h(board):
+    return sum(cell == 0 for row in board for cell in row)
+
 def game_loop():
     global selected_cell
     global original_board
@@ -315,6 +359,7 @@ def game_loop():
                     greedy_search(tabuleiro)
                 elif button_clicked((mouse_x, mouse_y), button2_rect):
                     print("Botão de A* pressionado!")
+                    a_star(tabuleiro)
                 else:
                     cell_row, cell_col = (
                         mouse_y // TAMANHO_BLOCO,
