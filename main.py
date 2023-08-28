@@ -54,7 +54,7 @@ def draw_grid():
 def draw_numbers():
     for row in range(9):
         for col in range(9):
-            if tabuleiro[row][col] != 0:
+            if board[row][col] != 0:
                 if initial_positions and (row, col) in initial_positions:
                     color = (0, 0, 255)
                 else:
@@ -69,7 +69,7 @@ def draw_numbers():
                         CELL_SIZE,
                     ),
                 )  # Clears the cell before drawing the number
-                num_text = font.render(str(tabuleiro[row][col]), True, color)
+                num_text = font.render(str(board[row][col]), True, color)
                 screen.blit(
                     num_text, (col * CELL_SIZE + 15, row * CELL_SIZE + 10)
                 )
@@ -200,7 +200,7 @@ def generate_sudoku():
     solve(board)
     return board
 
-tabuleiro = generate_sudoku()
+board = generate_sudoku()
 
 def remove_numbers(board, num_to_remove=30):
     # Create a list of all cells
@@ -267,18 +267,18 @@ def check_for_quit():
 # ===================================================================================================
 
 selected_cell = None
-remove_numbers(tabuleiro, 50)
+remove_numbers(board, 50)
 fixed_numbers = [[False for _ in range(9)] for _ in range(9)]
 for i in range(9):
     for j in range(9):
-        if tabuleiro[i][j] != 0:
+        if board[i][j] != 0:
             fixed_numbers[i][j] = True
-for row in tabuleiro:
+for row in board:
     print(row)
 initial_positions = set()
 for i in range(9):
     for j in range(9):
-        if tabuleiro[i][j] != 0:
+        if board[i][j] != 0:
             initial_positions.add((i, j))
 
 
@@ -336,11 +336,11 @@ def game_loop():
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 if button_clicked((mouse_x, mouse_y), button1_rect):
                     print("Botão de Busca Gulosa pressionado!")
-                    original_board = [row.copy() for row in tabuleiro]
-                    greedy_search(tabuleiro)
+                    original_board = [row.copy() for row in board]
+                    greedy_search(board)
                 elif button_clicked((mouse_x, mouse_y), button2_rect):
                     print("Botão de A* pressionado!")
-                    a_star(tabuleiro)
+                    a_star(board)
                 else:
                     cell_row, cell_col = (
                         mouse_y // CELL_SIZE,
@@ -350,7 +350,7 @@ def game_loop():
                     # Verify if the click was inside the board
                     if 0 <= cell_row < 9 and 0 <= cell_col < 9:
                         # Select the cell if it's empty
-                        if tabuleiro[cell_row][cell_col] == 0:
+                        if board[cell_row][cell_col] == 0:
                             selected_cell = (cell_row, cell_col)
                         else:
                             # Unselect the cell if it's already selected
@@ -362,8 +362,8 @@ def game_loop():
                     # Verify if the number is fixed
                     if not fixed_numbers[row][col]:
                         num = int(event.unicode)
-                        if is_valid(tabuleiro, num, row, col):
-                            tabuleiro[row][col] = num
+                        if is_valid(board, num, row, col):
+                            board[row][col] = num
                             selected_cell = None
         screen.fill(WHITE)
         draw_numbers()
