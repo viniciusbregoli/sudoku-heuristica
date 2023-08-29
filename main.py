@@ -59,16 +59,17 @@ def draw_numbers():
                     color = (0, 0, 255)
                 else:
                     color = BLACK
-                pygame.draw.rect(
-                    screen,
-                    WHITE,
-                    (
-                        col * CELL_SIZE,
-                        row * CELL_SIZE,
-                        CELL_SIZE,
-                        CELL_SIZE,
-                    ),
-                )  # Clears the cell before drawing the number
+                if running:
+                    pygame.draw.rect(
+                        screen,
+                        WHITE,
+                        (
+                            col * CELL_SIZE,
+                            row * CELL_SIZE,
+                            CELL_SIZE,
+                            CELL_SIZE,
+                        ),
+                    )  # Clears the cell before drawing the number
                 num_text = font.render(str(board[row][col]), True, color)
                 screen.blit(
                     num_text, (col * CELL_SIZE + 15, row * CELL_SIZE + 10)
@@ -94,8 +95,8 @@ def draw_buttons():
     pygame.draw.rect(screen, DARKER_GRAY, button2_rect)
 
     font = pygame.font.SysFont(None, 30)
-    button1_text = font.render("Resolver por Busca Gulosa", True, BLACK)
-    button2_text = font.render("Resolver por A*", True, BLACK)
+    button1_text = font.render("Solve for greedy search", True, BLACK)
+    button2_text = font.render("Solve for A*", True, BLACK)
 
     # Centralizing the text
     button1_text_pos = (
@@ -265,7 +266,7 @@ def check_for_quit():
 
 
 # ===================================================================================================
-
+running = False
 selected_cell = None
 remove_numbers(board, 50)
 fixed_numbers = [[False for _ in range(9)] for _ in range(9)]
@@ -314,6 +315,7 @@ def h(board):
 def game_loop():
     global selected_cell
     global original_board
+    global running
     button1_rect = pygame.Rect(
         (WIDTH - 2 * BUTTON_WIDTH - BUTTON_MARGIN) // 2,
         9 * CELL_SIZE + BUTTON_MARGIN,
@@ -335,11 +337,11 @@ def game_loop():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 if button_clicked((mouse_x, mouse_y), button1_rect):
-                    print("Botão de Busca Gulosa pressionado!")
                     original_board = [row.copy() for row in board]
+                    running = True
                     greedy_search(board)
                 elif button_clicked((mouse_x, mouse_y), button2_rect):
-                    print("Botão de A* pressionado!")
+                    running = True
                     a_star(board)
                 else:
                     cell_row, cell_col = (
@@ -366,9 +368,9 @@ def game_loop():
                             board[row][col] = num
                             selected_cell = None
         screen.fill(WHITE)
+        draw_highlights()
         draw_numbers()
         draw_grid()
-        draw_highlights()
         draw_buttons()
         pygame.display.flip()
 
