@@ -18,8 +18,7 @@ or simply by running on the platform of your choice.
 ## Showcase
 When running the code, it will generate a solvable sudoku game. You can play it normally:
 
-![Alt text](playing_gif.gif)
-
+![Alt text](playing_gif.gif)  
 But if you want to solve it using the algorithms, you can press either button on the bottom corner, and the algorithm will start solving the sudoku. The first button will use the greedy search, and the second button will use the A* algorithm.
 ### Solving with greedy search
 ![Alt text](greedy_search.gif)
