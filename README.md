@@ -1,4 +1,7 @@
 # Solving sudoku with heuristics algorithms
+
+![Greedy search filling a generated sudoku board](docs/images/greedy-solver.gif)
+
 ## Introduction
 This repository contains a pygame implementation of a sudoku solver using heuristics algorithms. This project was made during the Artificial Intelligence course at the Pontifical Catholic University of Paraná (PUCPR). The algorithms used are:
 ### Greedy Search
